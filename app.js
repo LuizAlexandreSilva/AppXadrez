@@ -9,19 +9,19 @@ const PORT = 3000;
 
 app.use(logger("short"));
 
-app.use('/img', [
-    express.static(__dirname + '/public/img')
-]);
-
-app.use(router);
-
 app.use(sass({
     src: __dirname + '/public/scss',
     dest: __dirname + '/public/css',
     debug: true,
     outputStyle: 'compressed',
-    prefix: '/css'
+    prefix: '/css',
+    force: true
 }));
+app.use('/public', express.static(__dirname + '/public/css'));
+
+app.use('/img', [
+    express.static(__dirname + '/public/img')
+]);
 
 app.use('/js', [
     express.static(__dirname + '/node_modules/jquery/dist/'),
@@ -33,6 +33,8 @@ app.use('/js', [
 app.engine('handlebars', handlebars());
 app.set('view engine', 'handlebars');
 app.set('views', __dirname + '/app/views');
+
+app.use(router);
 
 app.use(function(req, res) {
     res.statusCode = 404;
