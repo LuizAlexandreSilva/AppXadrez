@@ -14,4 +14,8 @@ const sobre = (req, res) => {
     });
 }
 
-module.exports = { index, sobre }
+const ui = (req, res) => {
+    res.render('main/ui');
+}
+
+module.exports = { index, sobre, ui }
