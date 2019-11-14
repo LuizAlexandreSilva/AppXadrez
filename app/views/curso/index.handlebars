@@ -1,0 +1,43 @@
+<div class="container">
+  <div id="signup" class="bs-docs-section">
+    <div class="row flex-nowrap">
+      <div class="col-lg-6">
+        <h1 class="float-left">Cursos da UFAM</h1>
+      </div>
+      <div class="col-lg-6">
+        <button type="submit" class="btn btn-primary float-right">
+          <i class="fa fa-plus"></i> Adicionar
+        </button>
+      </div>
+    </div>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col" width="15%">Sigla</th>
+            <th scope="col" width="65%">Nome</th>
+            <th scope="col" width="20%" class="text-center">Opções</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each cursos}}
+            <tr>
+              <th class="align-middle" scope="row">{{sigla}}</th>
+              <td class="align-middle">{{nome}}</td>
+              <td class="text-center align-middle">
+                <a class="btn" href="your link here">
+                  <i class="fa fa-eye" aria-hidden="true"></i>
+                </a>
+                <a class="btn" href="your link here">
+                  <i class="fa fa-pencil" aria-hidden="true"></i>
+                </a>
+                <a class="btn" href="your link here">
+                  <i class="fa fa-trash" aria-hidden="true"></i>
+                </a>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+  </div>
+</div>
+        

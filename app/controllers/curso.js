@@ -1,10 +1,12 @@
 var models = require('../models/index');
-var curso = models.curso;
+var Curso = models.curso;
 
-const index = (req, res) => {
+const index = async (req, res) => {
     const conteudo = 'Página principal da aplicação';
-    res.render('main/index', {
+    const cursos = await Curso.findAll();
+    res.render('curso/index', {
         conteudo: conteudo,
+        cursos,
         layout: 'main'
     });
 };
