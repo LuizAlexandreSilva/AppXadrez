@@ -9,16 +9,31 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       sigla: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          len: {
+            args: [3, 6],
+            msg: 'A sigla precisa ter entre 3 e 6 caracteres.'
+          }
+        }
       },
       nome: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          len: {
+            args: [5, 40],
+            msg: 'O nome precisa ter entre 5 e 40 caracteres.'
+          }
+        }
       },
       descricao: {
         type: Sequelize.TEXT
       },
-      id_area: {
-        type: Sequelize.INTEGER
+      area_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       created_at: {
         allowNull: false,

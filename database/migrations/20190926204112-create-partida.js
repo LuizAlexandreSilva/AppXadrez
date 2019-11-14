@@ -8,11 +8,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      id_user_1: {
-        type: Sequelize.INTEGER
+      user_id_1: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
-      id_user_2: {
-        type: Sequelize.INTEGER
+      user_id_2: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       winner: {
         type: Sequelize.INTEGER

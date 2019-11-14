@@ -9,18 +9,20 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       nome: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       email: {
         allowNull: false,
         unique: true,
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       senha: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
-      id_curso: {
-        type: Sequelize.INTEGER
+      curso_id: {
+        type: Sequelize.INTEGER,
       },
       created_at: {
         allowNull: false,
