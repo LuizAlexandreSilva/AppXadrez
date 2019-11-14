@@ -5,9 +5,9 @@
         <h1 class="float-left">Cursos da UFAM</h1>
       </div>
       <div class="col-lg-6">
-        <button type="submit" class="btn btn-primary float-right">
+        <a href="/curso/create" type="submit" class="btn btn-primary float-right">
           <i class="fa fa-plus"></i> Adicionar
-        </button>
+        </a>
       </div>
     </div>
     <table class="table table-striped">
@@ -24,13 +24,13 @@
               <th class="align-middle" scope="row">{{sigla}}</th>
               <td class="align-middle">{{nome}}</td>
               <td class="text-center align-middle">
-                <a class="btn" href="your link here">
+                <a class="btn" href="/curso/read/{{id}}">
                   <i class="fa fa-eye" aria-hidden="true"></i>
                 </a>
-                <a class="btn" href="your link here">
+                <a class="btn" href="/curso/update/{{id}}">
                   <i class="fa fa-pencil" aria-hidden="true"></i>
                 </a>
-                <a class="btn" href="your link here">
+                <a class="btn" href="/curso/remove/{{id}}">
                   <i class="fa fa-trash" aria-hidden="true"></i>
                 </a>
               </td>

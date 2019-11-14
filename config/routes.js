@@ -12,7 +12,14 @@ router.get("/sobre", mainController.sobre);
 
 router.get("/ui", mainController.ui);
 
-router.get("/curso/index", cursoController.index);
+router.get('/curso/index', cursoController.index);
+router.get('/curso/create', cursoController.create);
+router.post('/curso/create', cursoController.create);
+router.get('/curso/read/:id'    , cursoController.read);
+router.get('/curso/update/:id'  , cursoController.update);
+router.post('/curso/update/:id' , cursoController.update);
+router.get('/curso/remove/:id' , cursoController.remove);
+
 
 // router.get('/'                  , usuarioController.index);
 router.get('/signup'              , usuarioController.create);

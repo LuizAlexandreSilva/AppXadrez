@@ -1,0 +1,35 @@
+<div class="container">
+  <div id="visualizar-curso" class="bs-docs-section">
+    <div class="col-lg-6 mx-auto">
+      <div class="row flex-nowrap">
+        <div class="col-lg-8">
+          <h1 class="float-left">Visualizar Curso</h1>
+        </div>
+        <div class="col-lg-4 align-self-center">
+          <a href="/curso/index" type="submit" class="btn btn-primary float-right">
+            <i class="fa fa-arrow-left"></i> Voltar
+          </a>
+        </div>
+      </div>
+      <div class="form-group">
+          <label for="sigla">Sigla</label>
+          <input name="sigla" id="sigla" type="text" placeholder="IE08" class="form-control" readonly value="{{curso.sigla}}">
+      </div>
+      <div class="form-group">
+          <label for="nome">Nome</label>
+          <input name="nome" id="nome" type="text" placeholder="ABC" class="form-control" readonly value="{{curso.nome}}"> 
+      </div>
+      <div class="form-group">
+          <label for="descricao">Descrição do curso</label>
+          <input name="descricao" id="descricao" type="text" placeholder="Alguma descricao" class="form-control" readonly value="{{curso.descricao}}">
+      </div>
+      <br>
+      <h3>Área de Conhecimento</h3>
+      <div class="form-group">
+        {{#each areas}}
+          <input class="align-middle" type="radio" name="area_id" id="area_id" value="{{id}}" {{#equals id  ../curso.area_id}}checked="checked"{{/equals}} disabled> {{nome}}<br>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</div>
