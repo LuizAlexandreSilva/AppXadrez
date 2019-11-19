@@ -8,12 +8,18 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      id_partida: {
+      partida_id: {
         type: Sequelize.INTEGER,
+        references: { model: 'partidas', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'NO ACTION',
         allowNull: false,
       },
-      id_user: {
+      usuario_id: {
         type: Sequelize.INTEGER,
+        references: { model: 'usuarios', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'NO ACTION',
         allowNull: false,
       },
       mensagem: {

@@ -19,6 +19,10 @@ module.exports = (sequelize, DataTypes) => {
           args: true,
           msg: 'Email inválido'
         }
+      },
+      unique: {
+        args: true,
+        msg: 'O email ja está em uso'
       }
     },
     senha: {
@@ -45,7 +49,8 @@ module.exports = (sequelize, DataTypes) => {
     underscored: true,
   });
   usuario.associate = function(models) {
-    // associations can be defined here
+    usuario.belongsTo(models.curso);
+    usuario.hasMany(models.partida);
   };
   return usuario;
 };

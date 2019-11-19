@@ -36,7 +36,8 @@ module.exports = (sequelize, DataTypes) => {
     underscored: true,
   });
   curso.associate = function(models) {
-    // associations can be defined here
+    curso.belongsTo(models.area);
+    curso.hasMany(models.usuario);
   };
   return curso;
 };

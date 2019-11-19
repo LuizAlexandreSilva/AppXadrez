@@ -8,17 +8,17 @@
                     <form method="post" action="/signup">
                         <div class="form-group">
                             <label for="nome">Nome Completo</label>
-                            <input name="nome" id="nome" type="text" placeholder="Luiz Alexandre S. da Silva" class="form-control {{#if errors}}is-invalid{{/if}}" value={{usuario.nome}}>
+                            <input name="nome" id="nome" type="text" placeholder="Luiz Alexandre S. da Silva" class="form-control {{#if errors}}is-invalid{{/if}}" value="{{usuario.nome}}">
                             <div class="invalid-feedback">{{showError errors 'nome'}}</div>
                         </div>
                         <div class="form-group">
                             <label for="email">Endereço de E-mail</label>
-                            <input name="email" id="email" type="text" placeholder="luiz.alexandre@example.com" class="form-control {{#if errors}}is-invalid{{/if}}" value={{usuario.email}}>
+                            <input name="email" id="email" type="text" placeholder="luiz.alexandre@example.com" class="form-control {{#if errors}}is-invalid{{/if}}" value="{{usuario.email}}">
                             <div class="invalid-feedback">{{showError errors 'email'}}</div>    
                         </div>
                         <div class="form-group">
                             <label for="curso_id">Seu curso na UFAM</label>
-                            <select name="curso_id" class="form-control {{#if errors}}is-invalid{{/if}}" value={{usuario.curso_id}}>
+                            <select name="curso_id" class="form-control {{#if errors}}is-invalid{{/if}}" value="{{usuario.curso_id}}">
                             <option value="" disabled selected>Selecione seu curso</option>
                             <option value="1">Ciência da Computação</option>
                             <option value="2">Engenharia de Sofware</option>
@@ -28,12 +28,12 @@
                         </div>          
                         <div class="form-group">
                             <label for="senha">Escolha uma senha</label>
-                            <input name="senha" id="senha" type="password" placeholder="••••••••" class="form-control {{#if errors}}is-invalid{{/if}}" value={{usuario.senha}}>
+                            <input name="senha" id="senha" type="password" placeholder="••••••••" class="form-control {{#if errors}}is-invalid{{/if}}">
                             <div class="invalid-feedback">{{showError errors 'senha'}}</div>    
                         </div>
                         <div class="form-group">
                             <label for="confirmaSenha">Confirme sua senha</label>
-                            <input id="confirmaSenha" type="password" placeholder="••••••••" class="form-control {{#if errors}}is-invalid{{/if}}">
+                            <input id="confirmaSenha" name="confirmaSenha" type="password" placeholder="••••••••" class="form-control {{#if errors}}is-invalid{{/if}}">
                             <div class="invalid-feedback">As senhas digitadas não são iguais.</div>    
                         </div>
                         <div class="form-group form-check">
@@ -44,7 +44,7 @@
                             <div class="invalid-feedback">Você precisa concordar com os termos de serviço da aplicação.</div>    
                         </div>
                         <div class="form-group pt-2">
-                            <input type="hidden" name="_csrf" value="grNlBVXd-sjMb4oMQy2sXO41KvgKcmimYxSs">
+                            <input type="hidden" name="_csrf" value="{{csrf}}">
                             <button id="criar-conta" type="submit" class="btn btn-primary btn-lg btn-block">
                             <span class="button-text">Criar conta</span>
                             </button>

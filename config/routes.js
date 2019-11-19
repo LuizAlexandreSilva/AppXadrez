@@ -4,6 +4,9 @@ const mainController = require('../app/controllers/main');
 const usuarioController = require('../app/controllers/usuario');
 const cursoController = require('../app/controllers/curso');
 
+var csrf = require('csurf');
+var csrfProtection = csrf({ cookie: true });
+
 router.get("/", mainController.index);
 
 router.get("/sobre", mainController.sobre);
@@ -22,8 +25,8 @@ router.get('/curso/remove/:id' , cursoController.remove);
 
 
 // router.get('/'                  , usuarioController.index);
-router.get('/signup'              , usuarioController.create);
-router.post('/signup'             , usuarioController.create);
+router.get('/signup', csrfProtection, usuarioController.create);
+router.post('/signup', csrfProtection, usuarioController.create);
 router.get('/usuario/read/:id'    , usuarioController.read);
 router.get('/usuario/update/:id'  , usuarioController.update);
 router.post('/usuario/update/:id' , usuarioController.update);

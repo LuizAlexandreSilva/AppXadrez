@@ -4,17 +4,22 @@ var Area = models.area;
 var layout = 'main';
 
 const index = async (req, res) => {
-    const conteudo = 'Página principal da aplicação';
+    const csrf = req.csrfToken();
     const cursos = await Curso.findAll();
     res.render('curso/index', {
-        conteudo: conteudo,
+        csrf,
         cursos,
         layout
     });
 };
 
 const read  = async (req, res) => {
-    const curso = await Curso.findByPk(req.params.id);
+    const curso = await Curso.findByPk(req.params.id, {
+        include: [{
+            model: Area,
+            attributes: ['nome']
+        }]
+    });
     const areas = await Area.findAll();
     res.render('curso/read', {
         curso,
@@ -24,10 +29,13 @@ const read  = async (req, res) => {
 };
 
 const create = async (req, res) => {
+    const csrf = req.csrfToken();
+    console.log(req)
     const areas = await Area.findAll();
     if (req.route.methods.get) {
         res.render('curso/create', {
             areas,
+            csrf,
             layout
         });
     } else {
@@ -38,6 +46,7 @@ const create = async (req, res) => {
             res.render('curso/create', {
                 curso: req.body,
                 areas,
+                csrf,
                 errors: e.errors
             });
         }
@@ -45,12 +54,14 @@ const create = async (req, res) => {
 };
 
 const update = async (req, res) => {
+    const csrf = req.csrfToken();
     const curso = await Curso.findByPk(req.params.id);
     const areas = await Area.findAll();
     if (req.route.methods.get) {
         res.render('curso/update', {
             curso,
             areas,
+            csrf,
             layout
         });
     } else {
@@ -59,6 +70,7 @@ const update = async (req, res) => {
             res.redirect('/curso/index');
         } catch (e) {
             res.render(`curso/update/${curso.id}`, {
+                csrf,
                 curso: req.body,
                 areas,
                 errors: e.errors

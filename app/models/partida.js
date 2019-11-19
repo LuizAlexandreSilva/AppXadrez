@@ -9,7 +9,10 @@ module.exports = (sequelize, DataTypes) => {
     underscored: true,
   });
   partida.associate = function(models) {
-    // associations can be defined here
+    partida.belongsTo(models.usuario, { foreignKey: 'partidas_ibfk_1' });
+    partida.belongsTo(models.usuario, { foreignKey: 'partidas_ibfk_2' });
+    partida.belongsTo(models.usuario, { foreignKey: 'partidas_ibfk_3' });
+    partida.hasMany(models.mensagem);
   };
   return partida;
 };

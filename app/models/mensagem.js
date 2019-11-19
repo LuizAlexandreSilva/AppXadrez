@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     underscored: true,
   });
   mensagem.associate = function(models) {
-    // associations can be defined here
+    mensagem.belongsTo(models.partida);
   };
   return mensagem;
 };
