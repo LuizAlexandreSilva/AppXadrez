@@ -32,7 +32,6 @@ const create = async function (req, res) {
             errors: e.errors
           });
         }
-    // await Usuario.create(req.body)
       });
     });
   }

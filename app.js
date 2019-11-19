@@ -41,14 +41,14 @@ app.engine('handlebars', handlebars({
 app.set('view engine', 'handlebars');
 app.set('views', __dirname + '/app/views');
 
-// app.use(session({
-//     genid: (req) => {
-//         return uuid();
-//     },
-//     secret: 'Hi9Cf#mK98',
-//     resave: false,
-//     saveUninitialized: true
-// }))
+app.use(session({
+    genid: (req) => {
+        return uuid();
+    },
+    secret: 'Hi9Cf#mK98',
+    resave: false,
+    saveUninitialized: true
+}))
 app.use(express.urlencoded({ extended: false }))
 app.use(router);
 

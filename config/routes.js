@@ -11,7 +11,9 @@ router.get("/", mainController.index);
 
 router.get("/sobre", mainController.sobre);
 
-// router.get("/signup", mainController.signup);
+router.get("/login", csrfProtection, mainController.login);
+router.post("/login", csrfProtection, mainController.login);
+router.get("/logout", mainController.logout);
 
 router.get("/ui", mainController.ui);
 
@@ -24,7 +26,6 @@ router.post('/curso/update/:id' , cursoController.update);
 router.get('/curso/remove/:id' , cursoController.remove);
 
 
-// router.get('/'                  , usuarioController.index);
 router.get('/signup', csrfProtection, usuarioController.create);
 router.post('/signup', csrfProtection, usuarioController.create);
 router.get('/usuario/read/:id'    , usuarioController.read);
