@@ -1,3 +1,28 @@
 <div>
     {{conteudo}}
+
+    <div class="col">
+        <div id="board" style="width: 500px"></div>
+    </div>
+
+    <script>
+
+        const game = new Chess();
+        const color = '{{color}}';
+        const fen = 'start';
+        const partida = {{partida}};
+        game.load(fen); // fen é a posição das peças no tabuleiro
+        
+        const board = Chessboard('board', {
+            draggable: true,
+            orientation: (color == 'w') ? 'white' : 'black',
+            position: fen,
+            moveSpeed: 'slow',
+            pieceTheme: '/img/chesspieces/wikipedia/{piece}.png',
+            onDragStart: onDragStart, // quando o usuário pega a peça, para começar seu movimento
+            onDrop: onDrop, // quando o usuário solta a peça, para encerrar seu movimento
+            onSnapEnd: onSnapEnd // quando um jogador come a peça do outro, ou quando o peao chega no topo do campo do outro
+        });
+    </script>
+
 </div>

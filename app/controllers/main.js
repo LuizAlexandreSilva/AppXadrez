@@ -3,13 +3,21 @@ const bcrypt = require('bcryptjs');
 var Usuario = models.usuario;
 
 const index = (req, res) => {
-  const conteudo = 'Página principal da aplicação';
+  const conteudo = 'Nova partida';
   const { session } = req;
-  res.render('main/index', {
-    conteudo: conteudo,
-    sessionId: session ? session.uid : undefined,
-    layout: 'main'
-  });
+  if (session.uid) {
+    res.render('main/index', {
+      conteudo: conteudo,
+      sessionId: session.uid,
+      layout: 'main'
+    });
+  } else {
+    res.render('main/login', {
+      conteudo: conteudo,
+      csrf: req.csrfToken(),
+      layout: 'main'
+    });
+  }
 }
 
 const sobre = (req, res) => {

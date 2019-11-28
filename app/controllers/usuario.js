@@ -10,11 +10,33 @@ const create = async function (req, res) {
       csrf 
     });
   } else {
-    const { senha, confirmaSenha } = req.body
+    const { senha, confirmaSenha, termos } = req.body;
     console.log(req.body)
+    var errors = new Array();
+
     if (senha && senha !== confirmaSenha) {
-      throw new Error('erro');
+      var error = new Object();
+      error.path = 'confirmaSenha';
+      error.message = 'As senhas digitadas devem ser iguais.';
+      errors.push(error);
     }
+
+    if (!termos) {
+      var error = new Object();
+      error.path = 'termos';
+      error.message = 'Você precisa concordar com os termos de serviço da aplicação.';
+      errors.push(error);
+    }
+
+    if (errors.length > 0) {
+      res.render('main/signup', {
+        csrf,
+        usuario: req.body,
+        errors: errors
+      });
+      throw new Error;
+    }
+
     bcrypt.genSalt(8, function(err, salt) {
       bcrypt.hash(req.body.senha, salt, async(err, hash) => {
         try {
@@ -26,6 +48,7 @@ const create = async function (req, res) {
           });
           res.render('main');
         } catch (e) {
+          console.log(e.errors)
           res.render('main/signup', {
             csrf,
             usuario: req.body,

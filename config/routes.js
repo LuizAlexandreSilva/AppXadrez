@@ -7,7 +7,7 @@ const cursoController = require('../app/controllers/curso');
 var csrf = require('csurf');
 var csrfProtection = csrf({ cookie: true });
 
-router.get("/", mainController.index);
+router.get("/", csrfProtection, mainController.index);
 
 router.get("/sobre", mainController.sobre);
 

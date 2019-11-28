@@ -34,14 +34,14 @@
                         <div class="form-group">
                             <label for="confirmaSenha">Confirme sua senha</label>
                             <input id="confirmaSenha" name="confirmaSenha" type="password" placeholder="••••••••" class="form-control {{#if errors}}is-invalid{{/if}}">
-                            <div class="invalid-feedback">As senhas digitadas não são iguais.</div>    
+                            <div class="invalid-feedback">{{showError errors 'confirmaSenha'}}</div>    
                         </div>
                         <div class="form-group form-check">
-                            <input name="termos" id="termos" type="checkbox" class="form-check-input">
-                            <label for="termos" class="form-check-label">
+                            <input name="termos" id="termos" type="checkbox" class="form-check-input {{#if errors}}is-invalid{{/if}}">
+                            <label for="termos" class="form-check-label" style="color: white">
                             Eu li e concordo com os <a target="_blank" href="#" data-toggle="modal" data-target="#modal-termos"> termos de serviço</a>.
                             </label>
-                            <div class="invalid-feedback">Você precisa concordar com os termos de serviço da aplicação.</div>    
+                            <div class="invalid-feedback {{#if errors}}is-invalid{{/if}}">{{showError errors 'termos'}}</div>    
                         </div>
                         <div class="form-group pt-2">
                             <input type="hidden" name="_csrf" value="{{csrf}}">
