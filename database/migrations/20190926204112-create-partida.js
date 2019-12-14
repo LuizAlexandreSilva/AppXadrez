@@ -20,7 +20,7 @@ module.exports = {
         references: { model: 'usuarios', key: 'id' },
         onUpdate: 'CASCADE',
         onDelete: 'NO ACTION',
-        allowNull: false,
+        allowNull: true,
       },
       winner: {
         type: Sequelize.INTEGER,

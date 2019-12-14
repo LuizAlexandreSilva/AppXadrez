@@ -7,8 +7,37 @@ const sass = require('node-sass-middleware');
 const cookieParser = require('cookie-parser');
 const uuid = require('uuid/v4');
 const session = require('express-session');
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
+var models = require('./app/models');
+var Partida = models.partida;
 
 const PORT = 4567;
+
+io.on('connection', function (socket) {
+    console.log('Novo usuário conectado!');
+
+    socket.on('entrar', (idPartida) => {
+        console.log('Usuário entrando na partida ' + idPartida);
+        socket.join(idPartida);
+    });
+
+    socket.on('move', async (move) => {
+        socket.to(move.partida).emit('move', move);
+        var partida = await Partida.findByPk(move.partida);
+        partida = await partida.update({ fen: move.position });
+    });
+
+    socket.on('winner', async (dados) => {
+        var partida = await Partida.findByPk(dados.id_partida);
+        partida = await partida.update({ winner: dados.vencedor });
+    });
+
+    socket.on('draw', async (partida) => {
+        var partida = await Partida.findByPk(partida.idPartida);
+        partida = await partida.update({ winner: partida.vencedor });
+    });
+});
 
 app.use(logger("short"));
 
@@ -53,8 +82,11 @@ app.use(session({
         return uuid();
     },
     secret: 'Hi9Cf#mK98',
-    resave: false,
-    saveUninitialized: true
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+        expires: new Date(Date.now() + 3600000)
+    }
 }))
 app.use(express.urlencoded({ extended: false }))
 app.use(router);
@@ -64,6 +96,10 @@ app.use(function(req, res) {
     res.send("Página inexistente.");
 });
 
-app.listen(PORT, function() {
-    console.log("Escutando na porta " + PORT);
+http.listen(PORT, function() {
+    console.log('Escutando na porta ' + PORT);
 });
+
+// app.listen(PORT, function() {
+//     console.log("Escutando na porta " + PORT);
+// });

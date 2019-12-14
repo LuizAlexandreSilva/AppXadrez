@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
   });
   usuario.associate = function(models) {
     usuario.belongsTo(models.curso);
-    usuario.hasMany(models.partida);
+    // usuario.hasMany(models.partida);
   };
   return usuario;
 };

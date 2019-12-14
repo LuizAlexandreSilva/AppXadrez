@@ -46,7 +46,7 @@ const create = async function (req, res) {
             senha: hash,
             curso_id: req.body.curso_id
           });
-          res.render('main');
+          res.redirect('/main/login')
         } catch (e) {
           console.log(e.errors)
           res.render('main/signup', {

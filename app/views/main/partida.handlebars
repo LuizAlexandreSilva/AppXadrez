@@ -1,0 +1,203 @@
+<div class="row ml-1 mt-4">
+    <div class="col">
+        <div id="board" style="width: 500px"></div>
+        <div>
+            <span>
+            </span>
+        </div>
+        <div id="status">A vez é do jogador <b>branco</b>.</div>
+    </div>
+</div>
+
+<script>
+    (function () {
+
+    $("#chat-history").scrollTop($('#messages').height());
+
+    const socket = io();
+    const partida = '{{partida}}';
+    const user_w = '{{user_1}}';
+    const user_b = '{{user_2}}';
+    const fen = '{{fen}}';
+    // const user_current = game.turn() === 'w' ? user_w : user_b;
+    const my_color = '{{color}}';
+    const my_name = '{{color}}';
+    const op_color = 'black';
+    const op_name = 'teste';
+    const $status = $('#status');
+
+    socket.emit('entrar', partida);
+
+    $("#enviar").click(function () {
+        let mensagem = {
+            partida: partida,
+            user: { id: user_current, nome: my_name},
+            color: my_color,
+            mensagem: $("#message-to-send").val(),
+            date: new Date(Date.now()).toLocaleString()
+        };
+        socket.emit('mensagem', mensagem);
+        $("#message-to-send").val("");
+        appendMensagem(mensagem, 'right', my_color);
+        $("#chat-history").scrollTop($('#messages').height());
+    });  
+
+    $("#message-to-send").keypress(function (e) {
+        if(e.which == 13) {
+            $("#enviar").click();
+            return false;
+        }   
+    });
+
+    socket.on('mensagem', function(mensagem){
+        appendMensagem(mensagem, 'left', op_color);
+        $("#chat-history").scrollTop($('#messages').height());
+    });
+
+    function appendMensagem(mensagem, align, color) {
+
+        if (align == 'left') {
+        var messageData = 
+            `<div class="message-data">
+            <span class="message-piece"><i class="fas fa-chess-king"></i></span>              
+            <span class="message-data-name" >${mensagem.user.nome}</span>
+            <span class="message-data-time" >${mensagem.date}</span>  
+            </div>`;
+        } else {
+        var messageData = 
+            `<div class="message-data">
+            <span class="message-data-time" >${mensagem.date}</span>            
+            <span class="message-data-name" >${mensagem.user.nome}</span>          
+            <span class="message-piece"><i class="fas fa-chess-king"></i></span>              
+            </div>`;      
+        }
+
+        var newMessage = 
+        `<li class="${align}-message ${color}-message clearfix">
+            ${messageData}
+            <div class="message">
+            ${mensagem.mensagem}
+            </div>        
+        </li>`;
+
+        $("#messages").append(newMessage);
+    }
+
+    const game = new Chess();
+    game.load(fen);
+
+    const board = Chessboard('board', {
+        draggable: true,
+        orientation: my_color,
+        position: fen,
+        moveSpeed: 'slow',
+        pieceTheme: '/img/chesspieces/wikipedia/{piece}.png',
+        onDragStart: onDragStart,
+        onDrop: onDrop,
+        onSnapEnd: onSnapEnd
+    });
+
+    function onDragStart (source, piece, position, orientation) {
+        // do not pick up pieces if the game is over
+        if (game.game_over()) return false;
+
+        // only pick up pieces for its own color
+        if ((my_color === 'white' && piece.search(/^b/) !== -1) ||
+            (my_color === 'black' && piece.search(/^w/) !== -1)) {
+            return false  
+        }
+
+        // only pick up pieces for the side to move
+        if ((game.turn() === 'w' && piece.search(/^b/) !== -1) ||
+            (game.turn() === 'b' && piece.search(/^w/) !== -1)) {
+            return false
+        }
+    }
+
+    function onDrop (source, target) {
+        // see if the move is legal
+        var move = game.move({
+            from: source,
+            to: target,
+            promotion: 'q' // NOTE: always promote to a queen for example simplicity
+        });
+
+        // illegal move
+        if (move === null) return 'snapback'
+
+        // Enviar posição para adversário
+        socket.emit('move', {
+            partida: partida,
+            source: source,
+            target: target,
+            position: game.fen()
+        });
+
+        updateStatus();
+    }
+
+    // update the board position after the piece snap
+    // for castling, en passant, pawn promotion
+    function onSnapEnd () {
+        board.position(game.fen())
+    }
+
+    function updateStatus () {
+        var status = ''
+
+        var moveColor = '<b>branco</b>'
+        if (game.turn() === 'b') {
+            moveColor = '<b>preto</b>'
+        }
+
+        // checkmate?
+        if (game.in_checkmate()) {
+            status = 'É xeque-mate! Vitória do jogador ' + moveColor + '!';
+            socket.emit('winner', {
+                id_partida: partida,
+                vencedor: game.turn() === 'b' ? user_b : user_w
+            });
+        }
+
+        // empate? (draw)
+        else if (game.in_draw()) {
+            status = 'O jogo empatou!';
+            socket.emit('draw', {
+                id_partida: partida,
+                vencedor: 0
+            });
+        }
+
+        // game still on
+        else {
+            status = 'A vez é do jogador ' + moveColor + '.'
+
+        // check?
+            if (game.in_check()) {
+                status += ', o jogador ' + moveColor + ' está em xeque.'
+            }
+        }
+
+        $status.html(status)
+    }
+
+    socket.on('move', function(move){
+        if (move.partida == partida) {
+            board.move(move.source + '-' + move.target);
+
+            game.move({
+                from: move.source,
+                to: move.target,
+                promotion: 'q' // NOTE: always promote to a queen for example simplicity
+            }); 
+
+            updateStatus();
+        }
+
+    });  
+
+    updateStatus();
+
+    })();
+
+</script>

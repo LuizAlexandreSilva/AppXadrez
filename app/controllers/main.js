@@ -1,13 +1,33 @@
 var models = require('../models/index');
 const bcrypt = require('bcryptjs');
+const sequelize = require('sequelize');
+const op = sequelize.Op;
 var Usuario = models.usuario;
+var Partida = models.partida;
 
-const index = (req, res) => {
+const index = async (req, res) => {
   const conteudo = 'Nova partida';
   const { session } = req;
   if (session.uid) {
+    const minhasPartidas = await Partida.findAll(
+      { where: 
+        { [op.or]: 
+          [{ user_id_1: session.uid }, { user_id_2: session.uid }],
+          [op.and]: 
+          [{ winner: null }]
+        },
+      }
+    );
+    const aguardando = await Partida.findAll(
+      { where: 
+        { [op.and]:
+          [{ user_id_1: {[op.not]: session.uid}, user_id_2: null }] 
+        }
+      }
+    );
     res.render('main/index', {
-      conteudo: conteudo,
+      minhasPartidas,
+      aguardando,
       sessionId: session.uid,
       layout: 'main'
     });
@@ -20,9 +40,50 @@ const index = (req, res) => {
   }
 }
 
+const partida = async (req, res) => {
+  const { session } = req;
+  const { id } = req.params;
+  if (session.uid) {
+    if (id) {
+      var partida = await Partida.findByPk(id);
+
+      if (partida.user_id_1 != session.uid && partida.user_id_2 == null) {
+        partida = await partida.update({ user_id_2: session.uid });
+      }
+      const color = partida.user_id_1 == session.uid ? 'white' : 'black';
+      res.render('main/partida', {
+        sessionId: session.uid,
+        color,
+        partida: partida.id,
+        user_1: partida.user_id_1,
+        user_2: partida.user_id_2,
+        fen: partida.fen ? partida.fen : 'start',
+        layout: 'main'
+      });  
+    } else {
+      const partida = await Partida.findOrCreate(
+        { 
+          where: { user_id_1: session.uid }
+        }
+      );
+      res.render('main/partida', {
+        sessionId: session.uid,
+        color: 'white',
+        partida: partida.id,
+        user_1: partida.user_id_1,
+        user_2: partida.user_id_2,
+        fen: partida.fen ? partida.fen : 'start',
+        layout: 'main'
+      });
+    }
+  }
+}
+
 const sobre = (req, res) => {
   const conteudo = 'Página sobre a aplicação';
+  const { session } = req;
   res.render('main/sobre', {
+    sessionId: session.uid,
     conteudo: conteudo,
     layout: 'main'
   });
@@ -36,7 +97,6 @@ const signup = (req, res) => {
 
 const login = async function (req, res) {
   var csrf = req.csrfToken();
-
   if (req.route.methods.get) {
     res.render('main/login', {
       csrf
@@ -52,7 +112,6 @@ const login = async function (req, res) {
       bcrypt.compare(req.body.senha, usuario.senha, (err, ok) => {
         if (ok) {
           req.session.uid = usuario.id;
-          console.log(req.session.uid)
           res.redirect('/');
         } else {
           res.render('main/login', {
@@ -79,4 +138,4 @@ const ui = (req, res) => {
   res.render('main/ui');
 }
 
-module.exports = { index, sobre, login, signup, logout, ui }
+module.exports = { index, partida, sobre, login, signup, logout, ui }
