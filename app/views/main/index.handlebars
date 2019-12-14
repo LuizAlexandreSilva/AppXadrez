@@ -1,11 +1,65 @@
+<script>
+  const board = [];
+</script>
+
 <div>
     <h2>Minhas Partidas</h2>
-    {{#each minhasPartidas}}
-        <a href="/partida/{{id}}">{{id}}</a>
-    {{/each}}
+    <div class="row">
+        {{#each minhasPartidas}}
+        <div class="ml-4">
+            <a href="/partida/{{id}}">
+                <div id="board-{{id}}" style="width: 200px"></div>
+                <div id="opponents">
+                    <span style="color: #fff">
+                        <i class="fa fa-circle"></i>
+                    </span>
+                    <label style="font-size: 14px">
+                        {{user_1.nome}}   vs   {{#if user_2}}{{user_2.nome}}{{else}}A DEFINIR{{/if}}
+                    </label>
+                    <span style="color: #000">
+                        <i class="fa fa-circle"></i>
+                    </span>
+                </div>
+            </a>
+
+            <script>
+                board[{{id}}] = Chessboard("board-{{id}}", {
+                    orientation: 'white',
+                    position: 'start',
+                    showNotation: false
+                });
+            </script>
+        </div>
+        {{/each}}
+    </div>
+    
     <br>
     <h2>Usuários aguardando oponentes</h2>
+    <div class="row">
     {{#each aguardando}}
-        <a href="/partida/{{id}}">{{id}}</a>
+        <div class="ml-4">
+            <a href="/partida/{{id}}">
+            <div id="board-{{id}}" style="width: 200px"></div>
+                <div id="opponents">
+                    <span style="color: #fff">
+                        <i class="fa fa-circle"></i>
+                    </span>
+                    <label style="font-size: 14px">
+                        {{user_1.nome}}   vs   {{#if user_2}}{{user_2.nome}}{{else}}A DEFINIR{{/if}}
+                    </label>
+                    <span style="color: #000">
+                        <i class="fa fa-circle"></i>
+                    </span>
+                </div>
+            </a>
+            <script>
+                board[{{id}}] = Chessboard("board-{{id}}", {
+                    orientation: 'white',
+                    position: 'start',
+                    showNotation: false
+                });
+            </script>
+        </div>
     {{/each}}
+    </div>
 </div>

@@ -16,13 +16,21 @@ const index = async (req, res) => {
           [op.and]: 
           [{ winner: null }]
         },
+        include: [
+          { model: Usuario, as: 'user_1' },
+          { model: Usuario, as: 'user_2' }
+        ]
       }
     );
     const aguardando = await Partida.findAll(
       { where: 
         { [op.and]:
           [{ user_id_1: {[op.not]: session.uid}, user_id_2: null }] 
-        }
+        },
+        include: [
+          { model: Usuario, as: 'user_1' },
+          { model: Usuario, as: 'user_2' }
+        ]
       }
     );
     res.render('main/index', {
@@ -45,11 +53,17 @@ const partida = async (req, res) => {
   const { id } = req.params;
   if (session.uid) {
     if (id) {
-      var partida = await Partida.findByPk(id);
+      var partida = await Partida.findByPk(id, {
+        include: [
+          { model: Usuario, as: 'user_1' },
+          { model: Usuario, as: 'user_2' }
+        ]
+      });
 
       if (partida.user_id_1 != session.uid && partida.user_id_2 == null) {
         partida = await partida.update({ user_id_2: session.uid });
       }
+
       const color = partida.user_id_1 == session.uid ? 'white' : 'black';
       res.render('main/partida', {
         sessionId: session.uid,
@@ -57,6 +71,8 @@ const partida = async (req, res) => {
         partida: partida.id,
         user_1: partida.user_id_1,
         user_2: partida.user_id_2,
+        user_name_1: partida.user_1.nome,
+        user_name_2: partida.user_2 ? partida.user_2.nome : null,
         fen: partida.fen ? partida.fen : 'start',
         layout: 'main'
       });  
