@@ -1,0 +1,22 @@
+<div id="ranking">
+  <div class="row">
+    <div class="col">
+        <table class="table table-borderless">
+          <thead>
+              <tr class="table-secondary">
+                <th scope="col">Nome</th>
+                <th scope="col" class="text-right">Vitórias</th>
+              </tr>
+          </thead>
+          <tbody>
+            {{#each winners}}
+              <tr>
+                <td>{{'vencedor.nome'}}</td>
+                <td class="text-right">{{count}}</td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+    </div>
+  </div>
+</div>

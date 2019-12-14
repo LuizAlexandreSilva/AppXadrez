@@ -19,76 +19,17 @@
 <script>
     (function () {
 
-    $("#chat-history").scrollTop($('#messages').height());
-
     const socket = io();
     const partida = '{{partida}}';
     const user_w = '{{user_1}}';
     const user_b = '{{user_2}}';
     const fen = '{{fen}}';
-    // const user_current = game.turn() === 'w' ? user_w : user_b;
     const my_color = '{{color}}';
     const my_name = '{{color}}';
     const op_color = 'black';
-    const op_name = 'teste';
     const $status = $('#status');
 
     socket.emit('entrar', partida);
-
-    $("#enviar").click(function () {
-        let mensagem = {
-            partida: partida,
-            user: { id: user_current, nome: my_name},
-            color: my_color,
-            mensagem: $("#message-to-send").val(),
-            date: new Date(Date.now()).toLocaleString()
-        };
-        socket.emit('mensagem', mensagem);
-        $("#message-to-send").val("");
-        appendMensagem(mensagem, 'right', my_color);
-        $("#chat-history").scrollTop($('#messages').height());
-    });  
-
-    $("#message-to-send").keypress(function (e) {
-        if(e.which == 13) {
-            $("#enviar").click();
-            return false;
-        }   
-    });
-
-    socket.on('mensagem', function(mensagem){
-        appendMensagem(mensagem, 'left', op_color);
-        $("#chat-history").scrollTop($('#messages').height());
-    });
-
-    function appendMensagem(mensagem, align, color) {
-
-        if (align == 'left') {
-        var messageData = 
-            `<div class="message-data">
-            <span class="message-piece"><i class="fas fa-chess-king"></i></span>              
-            <span class="message-data-name" >${mensagem.user.nome}</span>
-            <span class="message-data-time" >${mensagem.date}</span>  
-            </div>`;
-        } else {
-        var messageData = 
-            `<div class="message-data">
-            <span class="message-data-time" >${mensagem.date}</span>            
-            <span class="message-data-name" >${mensagem.user.nome}</span>          
-            <span class="message-piece"><i class="fas fa-chess-king"></i></span>              
-            </div>`;      
-        }
-
-        var newMessage = 
-        `<li class="${align}-message ${color}-message clearfix">
-            ${messageData}
-            <div class="message">
-            ${mensagem.mensagem}
-            </div>        
-        </li>`;
-
-        $("#messages").append(newMessage);
-    }
 
     const game = new Chess();
     game.load(fen);

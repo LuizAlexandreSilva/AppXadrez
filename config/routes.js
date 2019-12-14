@@ -26,6 +26,8 @@ router.get("/ui", mainController.ui);
 router.get('/partida', mainController.partida);
 router.get('/partida/:id', mainController.partida);
 
+router.get('/ranking', mainController.ranking);
+
 router.get('/curso/index', cursoController.index);
 router.get('/curso/create', csrfProtection, cursoController.create);
 router.post('/curso/create', csrfProtection, cursoController.create);

@@ -51,6 +51,7 @@ const index = async (req, res) => {
 const partida = async (req, res) => {
   const { session } = req;
   const { id } = req.params;
+  console.log('req param', id)
   if (session.uid) {
     if (id) {
       var partida = await Partida.findByPk(id, {
@@ -79,20 +80,33 @@ const partida = async (req, res) => {
     } else {
       const partida = await Partida.findOrCreate(
         { 
-          where: { user_id_1: session.uid }
+          where: { user_id_1: session.uid, winner: null },
+          raw: true,
         }
       );
-      res.render('main/partida', {
-        sessionId: session.uid,
-        color: 'white',
-        partida: partida.id,
-        user_1: partida.user_id_1,
-        user_2: partida.user_id_2,
-        fen: partida.fen ? partida.fen : 'start',
-        layout: 'main'
-      });
+      res.redirect('/partida/' + partida[0].id);
     }
   }
+}
+
+const ranking = async (req, res) => {
+  const { session } = req;
+
+  const winners = await Partida.findAll({
+    where: { [op.not]: [{winner: null}] },
+    group: ['winner'],
+    attributes: ['winner', [sequelize.fn('COUNT', 'winner'), 'count']],
+    order: [[sequelize.literal('count'), 'DESC']],
+    raw: true,
+    include: [
+      { model: Usuario, as: 'vencedor' },
+    ]
+  })
+  res.render('main/ranking', {
+    sessionId: session.uid,
+    winners,
+    layout: 'main'
+  });
 }
 
 const sobre = (req, res) => {
@@ -154,4 +168,4 @@ const ui = (req, res) => {
   res.render('main/ui');
 }
 
-module.exports = { index, partida, sobre, login, signup, logout, ui }
+module.exports = { index, partida, ranking, sobre, login, signup, logout, ui }
