@@ -30,7 +30,7 @@
     "sass": "1.22.12",
     "sequelize": "^5.19.0",
     "sequelize-cli": "5.5.1",
-    "socket.io": "^2.3.0",
+    "socket.io": "^2.5.0",
     "uuid": "^3.3.3"
   }
 }
